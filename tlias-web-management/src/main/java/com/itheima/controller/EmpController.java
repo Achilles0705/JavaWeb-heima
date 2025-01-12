@@ -16,17 +16,6 @@ public class EmpController {
     @Autowired
     private EmpService empService;
 
-//    @GetMapping
-//    public Result page(@RequestParam(defaultValue = "1") Integer page,
-//                       @RequestParam(defaultValue = "10") Integer pageSize,
-//                       String name, Integer gender,
-//                       @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
-//                       @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
-//        log.info("分页查询：{}, {}, {}, {}, {}, {}", page, pageSize, name, gender, begin,end);
-//        PageResult<Emp> pageResult = empService.page(page, pageSize, name, gender, begin,end);
-//        return Result.success(pageResult);
-//    }
-
     @GetMapping
     public Result page(EmpQueryParam empQueryParam) {
         log.info("Emp分页查询：{}", empQueryParam);
@@ -46,6 +35,35 @@ public class EmpController {
         log.info("查询全部员工数据");
         List<Clazz> empList = empService.findAll();
         return Result.success(empList);
+    }
+
+    /*//删除员工-数组
+    @DeleteMapping
+    public Result delete(Integer[] ids) {
+        log.info("删除员工：{}", Arrays.toString(ids));
+        return Result.success();
+    }*/
+
+    @DeleteMapping
+    public Result delete(@RequestParam List<Integer> ids) {
+        log.info("删除员工：{}", ids);
+        empService.delete(ids);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    public Result getInfo(@PathVariable Integer id) {
+        log.info("ID查询员工信息：{}", id);
+        Emp emp = empService.getInfo(id);
+        return Result.success(emp);
+    }
+
+    //修改员工
+    @PutMapping
+    public Result update(@RequestBody Emp emp) {
+        log.info("修改员工：{}", emp);
+        empService.update(emp);
+        return Result.success();
     }
 
 }

@@ -16,4 +16,10 @@ public interface EmpService {
     void save(Emp emp);
 
     List<Clazz> findAll();
+
+    void delete(List<Integer> ids);
+
+    Emp getInfo(Integer id);
+
+    void update(Emp emp);
 }

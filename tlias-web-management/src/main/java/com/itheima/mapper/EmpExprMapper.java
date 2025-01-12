@@ -10,4 +10,5 @@ public interface EmpExprMapper {
 
     void insertBatch(List<EmpExpr> exprList);
 
+    void deleteByEmpIds(List<Integer> empIds);
 }
