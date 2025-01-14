@@ -28,4 +28,15 @@ public class GlobalExceptionHandler {
         return Result.error(arr[2] + " 已存在");
     }
 
+    @ExceptionHandler(ClazzNotEmptyException.class)  //  处理 ClassNotEmptyException
+    public Result handleClazzNotEmptyException(ClazzNotEmptyException e) {
+        log.error("班级非空异常", e);
+        return Result.error(e.getMessage()); // 返回自定义的错误信息
+    }
+
+    @ExceptionHandler(DeptNotEmptyException.class)  //  处理 ClassNotEmptyException
+    public Result handleDeptNotEmptyException(DeptNotEmptyException e) {
+        log.error("部门非空异常", e);
+        return Result.error(e.getMessage()); // 返回自定义的错误信息
+    }
 }

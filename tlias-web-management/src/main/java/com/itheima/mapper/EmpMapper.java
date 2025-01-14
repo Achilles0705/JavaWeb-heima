@@ -3,27 +3,14 @@ package com.itheima.mapper;
 import com.itheima.pojo.Clazz;
 import com.itheima.pojo.Emp;
 import com.itheima.pojo.EmpQueryParam;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EmpMapper {
 
-//    //查询总记录数
-//    @Select("select count(*) from emp e left join dept d on e.dept_id = d.id")
-//    Long count();
-//
-//    //分页查询
-//    @Select("select e.*, d.name deptName from emp e left join dept d on e.dept_id = d.id " +
-//            "order by e.update_time desc limit #{start}, #{pageSize}")
-//    List<Emp> list(Integer start, Integer pageSize);
-
-    //@Select("select e.*, d.name deptName from emp e left join dept d on e.dept_id = d.id order by e.update_time desc")
-//    List<Emp> list(String name, Integer gender, LocalDate begin, LocalDate end);
     List<Emp> list(EmpQueryParam empQueryParam);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")//获取到生成的主键-来自mybatis
@@ -42,4 +29,12 @@ public interface EmpMapper {
 
     //根据ID更新员工基本信息
     void updateById(Emp emp);
+
+    //统计员工职位人数
+    @MapKey("pos")
+    List<Map<String, Object>> countEmpJobData();
+
+    //统计员工性别人数
+    @MapKey("name")
+    List<Map<String, Object>> countEmpGenderData();
 }

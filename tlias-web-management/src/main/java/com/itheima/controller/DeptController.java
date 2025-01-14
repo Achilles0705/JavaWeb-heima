@@ -1,5 +1,6 @@
 package com.itheima.controller;
 
+import com.itheima.exception.DeptNotEmptyException;
 import com.itheima.pojo.Dept;
 import com.itheima.pojo.Result;
 import com.itheima.service.DeptService;
@@ -14,12 +15,10 @@ import java.util.List;
 @RestController
 public class DeptController {
 
-    //private static final Logger log = LoggerFactory.getLogger("DeptController.class");
-
     @Autowired
     private DeptService deptService;
 
-    //@RequestMapping(value = "/depts", method = RequestMethod.GET)
+    //部门列表查询
     @GetMapping
     public Result list() {
         log.info("查询全部部门数据");
@@ -27,13 +26,21 @@ public class DeptController {
         return Result.success(deptList);
     }
 
+    //删除部门
     @DeleteMapping
     public Result delete(Integer id) {
+
+        int empCount = deptService.getEmpCountByDeptId(id);
+        if (empCount > 0) {
+            throw new DeptNotEmptyException("对不起，当前部门下有员工，不能直接删除~");
+        }
+
         log.info("删除的id部门为：{}", id);
         deptService.deleteById(id);
         return Result.success();
     }
 
+    //添加部门
     @PostMapping
     public Result add(@RequestBody Dept dept) {
         log.info("新增部门：{}", dept);
@@ -41,6 +48,7 @@ public class DeptController {
         return Result.success();
     }
 
+    //根据ID查询
     @GetMapping("/{id}")
     public Result getInfo(@PathVariable Integer id) {
         log.info("ID查询部门：{}", id);
@@ -48,6 +56,7 @@ public class DeptController {
         return Result.success(dept);
     }
 
+    //修改部门
     @PutMapping
     public Result update(@RequestBody Dept dept) {
         log.info("修改部门：{}", dept);

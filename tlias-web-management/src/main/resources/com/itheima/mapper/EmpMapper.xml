@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itheima.mapper.EmpMapper">
+
     <!--根据ID更新员工信息-->
     <update id="updateById">
         update emp
@@ -22,6 +23,7 @@
         </set>
         where id = #{id}
     </update>
+
     <!--批量删除员工基本信息-->
     <delete id="deleteByIds">
         delete from emp where id in
@@ -31,7 +33,7 @@
     </delete>
 
     <select id="list" resultType="com.itheima.pojo.Emp">
-        select e.*, d.name from emp e left join dept d on e.dept_id = d.id
+        select e.*, d.name deptName from emp e left join dept d on e.dept_id = d.id
         <where>
             <if test="name != null and name != ''">
                 e.name like concat('%', #{name}, '%')
@@ -45,6 +47,7 @@
         </where>
         order by e.update_time desc
     </select>
+
     <!--根据ID查询员工基本信息和工作经历信息-->
     <!--自定义结果集ResultMap-->
     <resultMap id="empResultMap" type="com.itheima.pojo.Emp">
@@ -85,4 +88,27 @@
         from emp e left join emp_expr ee on e.id = ee.emp_id
         where e.id = #{id}
     </select>
+
+    <!-- 统计各个职位的员工人数 -->
+    <select id="countEmpJobData" resultType="java.util.Map">
+        select
+            (case job when 1 then '班主任'
+                      when 2 then '讲师'
+                      when 3 then '学工主管'
+                      when 4 then '教研主管'
+                      when 5 then '咨询师'
+                      else '其他' end) pos,
+            count(*) num
+        from emp group by job
+        order by num
+    </select>
+
+    <!-- 统计员工的性别信息 -->
+    <select id="countEmpGenderData" resultType="java.util.Map">
+        select
+            if(gender = 1, '男性员工', '女性员工') as name,
+            count(*) as value
+        from emp group by gender;
+    </select>
+
 </mapper>

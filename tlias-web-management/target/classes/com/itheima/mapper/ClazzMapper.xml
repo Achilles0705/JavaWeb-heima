@@ -3,9 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itheima.mapper.ClazzMapper">
-    <select id="list" resultType="com.itheima.pojo.Clazz">
-        -- 查询班级的信息, 以及班主任姓名
-        select c.*, e.name as master_name from clazz c left join emp e on c.master_id = e.id
+
+    <!--<select id="list" resultType="com.itheima.pojo.Clazz">
+        &#45;&#45; 查询班级的信息, 以及班主任姓名
+        select
+        c.*,
+        e.name as master_name,
+        (case when now() &lt; c.begin_date then '未开班'
+        when now() &gt; c.end_date then '已结课'
+        else '在读'
+        end) as status
+        from clazz c left join emp e on c.master_id = e.id
         <where>
             <if test="name != null and name != ''">
                 c.name like concat('%', #{name}, '%')
@@ -15,8 +23,48 @@
                 and c.end_date between #{begin} and #{end}
             </if>
         </where>
-        order by c.update_time desc
+        /*order by e.update_time desc*/
+    </select>-->
+
+    <resultMap id="ClazzResultMap" type="com.itheima.pojo.Clazz">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="room" column="room"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="masterId" column="master_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <!--  关键：映射 masterName 和 status  -->
+        <result property="masterName" column="master_name"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="list" resultMap="ClazzResultMap">
+        select
+        c.*,
+        e.name as master_name,  --  注意列名和 resultMap 中的 property 一致
+        (case when now() &lt; c.begin_date then '未开班'
+        when now() &gt; c.end_date then '已结课'
+        else '在读'
+        end) as status       --  注意列名和 resultMap 中的 property 一致
+        from clazz c left join emp e on c.master_id = e.id
+        <where>
+            <if test="name != null and name != ''">
+                c.name like concat('%', #{name}, '%')
+            </if>
+            <if test="begin != null and end != null">
+                and c.begin_date between #{begin} and #{end}
+                and c.end_date between #{begin} and #{end}
+            </if>
+        </where>
     </select>
+
+    <!--根据id得到该班级下的学员数量-->
+    <select id="getStudentCountByClazzId" resultType="java.lang.Integer">
+        select count(*) from student s left join clazz c on s.clazz_id = c.id where c.id = #{id}
+    </select>
+
     <update id="update">
         update clazz set name = #{name}, room = #{room}, begin_date = #{beginDate}, end_date = #{endDate},
                          master_id = #{masterId}, subject = #{subject}

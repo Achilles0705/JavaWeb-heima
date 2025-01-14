@@ -19,4 +19,6 @@ public interface ClazzService {
     void update(Clazz clazz);
 
     Clazz getById(Integer id);
+
+    int getStudentCountByClazzId(Integer id);
 }

@@ -28,6 +28,9 @@ public interface DeptMapper {
     @Select("select id, name, create_time, update_time from dept where id = #{id}")
     Dept getById(Integer id);
 
-    @Update("update dept set name = #{name}, update_time = #{updateTime} where id = #{id};")
+    @Update("update dept set name = #{name}, update_time = #{updateTime} where id = #{id}")
     void update(Dept dept);
+
+    @Select("select count(*) from emp e left join dept d on e.dept_id = d.id where d.id = #{id}")
+    int getEmpCountByDeptId(Integer id);
 }

@@ -57,4 +57,9 @@ public class ClazzServiceImpl implements ClazzService {
         return clazzMapper.getById(id);
     }
 
+    @Override
+    public int getStudentCountByClazzId(Integer id) {
+        return clazzMapper.getStudentCountByClazzId(id);
+    }
+
 }
