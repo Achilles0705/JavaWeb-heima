@@ -1,5 +1,6 @@
 package com.itheima.controller;
 
+import com.itheima.anno.Log;
 import com.itheima.exception.DeptNotEmptyException;
 import com.itheima.pojo.Dept;
 import com.itheima.pojo.Result;
@@ -27,6 +28,7 @@ public class DeptController {
     }
 
     //删除部门
+    @Log
     @DeleteMapping
     public Result delete(Integer id) {
 
@@ -41,6 +43,7 @@ public class DeptController {
     }
 
     //添加部门
+    @Log
     @PostMapping
     public Result add(@RequestBody Dept dept) {
         log.info("新增部门：{}", dept);
@@ -57,6 +60,7 @@ public class DeptController {
     }
 
     //修改部门
+    @Log
     @PutMapping
     public Result update(@RequestBody Dept dept) {
         log.info("修改部门：{}", dept);

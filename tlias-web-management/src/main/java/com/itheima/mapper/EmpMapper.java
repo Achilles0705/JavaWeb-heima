@@ -37,4 +37,6 @@ public interface EmpMapper {
     //统计员工性别人数
     @MapKey("name")
     List<Map<String, Object>> countEmpGenderData();
+
+    Emp selectByUsernameAndPassword(Emp emp);
 }
