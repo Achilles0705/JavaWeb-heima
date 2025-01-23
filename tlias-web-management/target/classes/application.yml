@@ -27,5 +27,5 @@ logging:
 aliyun:
   oss:
     endpoint: https://oss-cn-beijing.aliyuncs.com
-    bucketname: achilles-javaweb
+    bucketName: achilles-javaweb
     region: cn-beijing

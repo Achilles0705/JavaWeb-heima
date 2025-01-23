@@ -6,6 +6,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.auth.CredentialsProviderFactory;
 import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
 import com.aliyun.oss.common.comm.SignVersion;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
@@ -25,6 +26,7 @@ public class AliyunOSSOperator {
     private String region;*/
 
     //方法二：基于ConfigurationProperties注解批量注入
+    @Autowired
     private AliyunOSSProperties aliyunOSSProperties;
 
     public String upload(byte[] content, String originalFilename) throws Exception {
